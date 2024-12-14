@@ -6,7 +6,7 @@ fun main() {
     val exclude = mutableListOf<Int>()
 
     println("Welcome to our Happy numbers checker!")
-    print("Enter a Integer: ")
+    print("Enter an Integer: ")
     var number = readLine()?.toIntOrNull() ?: return println("Enter a valid number!")
 
     while (number != 1) {

@@ -9,7 +9,7 @@ fun main() {
 
     println("Welcome to our Happy numbers checker!")
 
-    print("Enter a Integer: ")
+    print("Enter an Integer: ")
     var number = readLine()?.toIntOrNull() ?: return println("Enter a valid number!")
 
     while (soma != 1.0) {
