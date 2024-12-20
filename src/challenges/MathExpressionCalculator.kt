@@ -1,7 +1,7 @@
 package challenges
 
 fun main () {
-    val expression = "2 + 3 * 4"
+   val expression = "20 + 3 * 4"
     val result = calculate(expression)
     println("Result: $result")
 
@@ -9,8 +9,8 @@ fun main () {
 
 fun calculate(expression: String): Int {
     val tokens = tokenize(expression.replace(" ", ""))
-    val  tokensAfterMultiplication = handleMultiplicationAndDivision(tokens)
-    val result = handleAdditionAndSubtraction(tokensAfterMultiplication)
+    val afterMultiplication = handleMultiplicationAndDivision(tokens)
+    val result = handleAdditionAndSubtraction(afterMultiplication)
     return result
 }
 
@@ -20,23 +20,39 @@ fun tokenize(expression: String): MutableList<String> {
 }
 
 fun handleMultiplicationAndDivision(tokens: MutableList<String>): MutableList<String> {
-    var result = handleAdditionAndSubtraction(tokens)
+    val newTokens = mutableListOf<String>()
+    var currentNumber = tokens.removeAt(0).toInt()
 
-    while (tokens.isNotEmpty() && tokens[0] == "*" || tokens[0] == "/") {
+    while (tokens.isNotEmpty()) {
         val operator = tokens.removeAt(0)
         val nextNumber = tokens.removeAt(0).toInt()
-        result = if (operator == "*") result * nextNumber else result / nextNumber
+
+        if (operator == "*") {
+            currentNumber *= nextNumber
+        } else if (operator == "/") {
+            currentNumber /= nextNumber
+        }else {
+            newTokens.add(currentNumber.toString())
+            newTokens.add(operator)
+            currentNumber = nextNumber
+        }
     }
-    return
+    newTokens.add(currentNumber.toString())
+    return newTokens
 }
 
 fun handleAdditionAndSubtraction(tokens: MutableList<String>): Int {
-    var token = tokens.removeAt(0).toInt()
+    var result = tokens.removeAt(0).toInt()
 
-    while (tokens.isNotEmpty() && tokens[0] == "+" || tokens[0] == "-") {
+    while (tokens.isNotEmpty()) {
         val operator = tokens.removeAt(0)
         val nextNumber = tokens.removeAt(0).toInt()
-        token = if (operator == "+") token + nextNumber else token - nextNumber
+
+        if (operator == "+") {
+            result += nextNumber
+        } else if (operator == "-") {
+            result -= nextNumber
+        }
     }
-    return token
+    return result
 }
