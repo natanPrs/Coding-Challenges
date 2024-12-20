@@ -27,7 +27,7 @@ fun handleMultiplicationAndDivision(tokens: MutableList<String>): MutableList<St
         val nextNumber = tokens.removeAt(0).toInt()
         result = if (operator == "*") result * nextNumber else result / nextNumber
     }
-    return result
+    return
 }
 
 fun handleAdditionAndSubtraction(tokens: MutableList<String>): Int {
