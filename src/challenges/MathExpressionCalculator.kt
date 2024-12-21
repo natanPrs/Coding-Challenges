@@ -1,7 +1,7 @@
 package challenges
 
 fun main () {
-   val expression = "20 + 3 * 4"
+    val expression = "20 + 3 * 4"
     val result = calculate(expression)
     println("Result: $result")
 
