@@ -1,7 +1,5 @@
 package solutions
 
-import java.beans.Expression
-
 fun main() {
     println("Welcome to Math Expression Calculator!")
 
@@ -23,10 +21,10 @@ fun main() {
 }
 
 fun calculate(expression: String): Any {
-    val tokens = tokenize(expression)
+    val tokens = tokenize(expression.replace(" ", ""))
     val result = parseExpression(tokens)
+    return result
 }
-
 fun tokenize(expression: String): MutableList<String> {
     val regex = """(\d+(\.\d+)?|[+\-*/()])""".toRegex()
     return regex.findAll(expression).map { it.value }.toMutableList()
@@ -38,24 +36,41 @@ fun parseExpression(tokens: MutableList<String>): Double {
 
 fun parseTerm(tokens: MutableList<String>): Double {
     var result = parseFactor(tokens)
+
+    while (tokens.isNotEmpty() && (tokens[0] == "+" || tokens[0] == "-")) {
+        val operator = tokens.removeAt(0)
+        val nextNumber = parseFactor(tokens)
+
+        result = if (operator == "+") result + nextNumber else result - nextNumber
+    }
+    return result
 }
 
-fun parseFactor(tokens: MutableList<String>): Any {
+fun parseFactor(tokens: MutableList<String>): Double {
     var result = parsePrimary(tokens)
+
+    while (tokens.isNotEmpty() && (tokens[0] == "*" || tokens[0] == "/")){
+        val operator = tokens.removeAt(0)
+        val nextNumber = parsePrimary(tokens)
+
+        result = if (operator == "*") result * nextNumber else result / nextNumber
+    }
+    return result
 }
 
-fun parsePrimary(tokens: MutableList<String>): Any {
+fun parsePrimary(tokens: MutableList<String>): Double {
     if (tokens.isEmpty()) throw Exception("Invalid Expression")
 
     val token = tokens.removeAt(0)
     return when {
         token == "(" -> {
             val result = parseExpression(tokens)
-            if (tokens.isEmpty() || tokens[0] != ")") {
-                throw Exception("Error with the parentheses")
+            if (tokens.isEmpty() || tokens.removeAt(0) != ")") {
+                throw Exception("Parenthesis error!")
             }
             result
         }
-        token
+        token.matches(Regex("""-?\d+(\.\d+)?""")) -> token.toDouble()
+        else -> throw Exception("Invalid Token: $token")
     }
 }

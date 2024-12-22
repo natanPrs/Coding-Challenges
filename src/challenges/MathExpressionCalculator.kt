@@ -1,7 +1,7 @@
 package challenges
 
 fun main () {
-    val expression = "20 + 3 * 4"
+    val expression = "2 + 3 * 5 + 1"
     val result = calculate(expression)
     println("Result: $result")
 
@@ -9,14 +9,19 @@ fun main () {
 
 fun calculate(expression: String): Int {
     val tokens = tokenize(expression.replace(" ", ""))
-    val afterMultiplication = handleMultiplicationAndDivision(tokens)
-    val result = handleAdditionAndSubtraction(afterMultiplication)
+    val result = handleExpression(tokens)
     return result
 }
 
 fun tokenize(expression: String): MutableList<String> {
     val regex = """(\d+(\.\d+)?|[+\-*/()])""".toRegex()
     return regex.findAll(expression).map { it.value }.toMutableList()
+}
+
+fun handleExpression(tokens: MutableList<String>): Int {
+    val afterMultiplication = handleMultiplicationAndDivision(tokens)
+    val result = handleAdditionAndSubtraction(afterMultiplication)
+    return result
 }
 
 fun handleMultiplicationAndDivision(tokens: MutableList<String>): MutableList<String> {
