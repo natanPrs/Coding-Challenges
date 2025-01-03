@@ -19,4 +19,3 @@ fun forInput(message: String): Int {
     print(message)
     return readlnOrNull()?.toIntOrNull() ?: forInput("Enter a valid number! Try again:  ")
 }
-
